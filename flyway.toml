@@ -1,0 +1,8 @@
+# Configuración de Flyway. La contraseña se pasa con la variable FLYWAY_PASSWORD, nunca aquí.
+[environments.local]
+url = "jdbc:postgresql://localhost:5432/hatocontrol"
+user = "hatocontrol"
+
+[flyway]
+environment = "local"
+locations = ["filesystem:migraciones"]

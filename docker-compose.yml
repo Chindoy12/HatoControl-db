@@ -1,0 +1,15 @@
+# PostgreSQL local para desarrollo. En producción la base vive en Amazon RDS (Fase 12).
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: hatocontrol
+      POSTGRES_USER: hatocontrol
+      POSTGRES_PASSWORD: ${BD_CONTRASENA:?Define BD_CONTRASENA en el archivo .env}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - datos:/var/lib/postgresql/data
+
+volumes:
+  datos:
