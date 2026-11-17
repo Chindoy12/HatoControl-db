@@ -24,11 +24,19 @@ jobs:
           --health-retries 10
     steps:
       - uses: actions/checkout@v4
-      - name: Aplicar migraciones con Flyway
+      - name: Aplicar migraciones (como en producción)
         run: >
-          docker run --rm --network host -v "$PWD/migraciones:/flyway/sql"
+          docker run --rm --network host -v "$PWD:/proyecto"
           flyway/flyway:11
           -url=jdbc:postgresql://localhost:5432/hatocontrol
           -user=hatocontrol -password=prueba-ci
-          -locations=filesystem:/flyway/sql
+          -locations=filesystem:/proyecto/migraciones
           migrate
+      - name: Cargar datos de prueba
+        run: >
+          docker run --rm --network host -v "$PWD:/proyecto"
+          flyway/flyway:11
+          -url=jdbc:postgresql://localhost:5432/hatocontrol
+          -user=hatocontrol -password=prueba-ci
+          -locations=filesystem:/proyecto/migraciones,filesystem:/proyecto/datos-prueba
+          migrate info
