@@ -1,6 +1,6 @@
 -- HatoControl · datos de prueba (los mismos de los mockups de la Fase 5).
 -- Solo para desarrollo y presentación. Contraseña de todos los usuarios de prueba: Esperanza26
--- La leche usa fechas relativas a hoy para que el promedio de la semana siempre tenga datos.
+-- La leche usa fechas relativas a hoy (hora de Colombia) para que el promedio de la semana siempre tenga datos.
 
 INSERT INTO fincas (nombre, fecha_registro) VALUES
     ('La Esperanza', DATE '2026-01-15'),
@@ -115,7 +115,7 @@ SELECT an.id,
 FROM animales an
 JOIN fincas f ON f.id = an.finca_id AND f.nombre = 'La Esperanza'
 CROSS JOIN LATERAL generate_series(
-    CURRENT_DATE - CASE an.codigo_arete WHEN 'CO-0142' THEN 60 ELSE 30 END,
-    CURRENT_DATE - 1,
+    (now() AT TIME ZONE 'America/Bogota')::date - CASE an.codigo_arete WHEN 'CO-0142' THEN 60 ELSE 30 END,
+    (now() AT TIME ZONE 'America/Bogota')::date - 1,
     CASE an.codigo_arete WHEN 'CO-0188' THEN INTERVAL '2 days' ELSE INTERVAL '1 day' END) AS d
 WHERE an.codigo_arete IN ('CO-0142', 'CO-0105', 'CO-0188');
